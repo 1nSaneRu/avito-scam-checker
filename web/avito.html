@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Avito Scam Checker © Alexey Bunak</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+</head>
+
+<body>
+    <form id="myForm">
+        <label for="score">Рейтинг (от 0 до 5):</label>
+        <input type="number" id="score" name="score" step="0.1" min="0" max="5" required><br>
+    
+        <label for="category_id">Категория (21,27,32,82):</label>
+        <input type="number" id="category_id" name="category_id" required><br>
+    
+        <label for="has_diff_location">Объявления в разных городах:</label>
+        <input type="checkbox" id="has_diff_location" name="has_diff_location"><br>
+    
+        <label for="uncounted">Количество отзывов без оценки:</label>
+        <input type="number" id="uncounted" name="uncounted" required><br>
+    
+        <label for="count_procent">Процент учтенных отзывов:</label>
+        <input type="number" id="count_procent" name="count_procent" step="1" min="0" max="100" required><br>
+    
+        <label for="bad_item">Подозрительные объявления:</label>
+        <input type="checkbox" id="bad_item" name="bad_item"><br>
+        <label for="model">Модель :</label>
+        <select id="model" name="model">
+            <option value="rf">RandomForestClassifier</option>
+            <option value="svm">SVC</option>
+            <option value="sgd">SGDClassifier</option>
+            <option value="dt">DecisionTreeClassifier</option>
+            <option value="gb">GradientBoostingClassifier</option>
+            <option value="nb">GaussianNB</option>
+            <option value="mlp">MLPClassifier</option>
+            <option value="knn">KNeighborsClassifier</option>
+            <option value="lr">LogisticRegression</option>
+        </select><br><br>
+    
+        <input type="submit" value="ОК"><br><br>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+    document.getElementById('myForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var form_data = new FormData(this);
+
+            fetch('avito.php', {
+                method: 'POST',
+                body: form_data
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (result) {
+                    document.getElementById('result').innerHTML = JSON.parse(result);
+                })
+                .catch(function (error) {
+                    console.error('Ошибка при отправке формы:', error);
+                });
+        });
+    </script>
+</body>
+</html>
